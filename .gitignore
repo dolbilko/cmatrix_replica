@@ -23,4 +23,6 @@ go.work.sum
 
 # env file
 .env
-ai/
+temp/
+drop.go
+new.go
