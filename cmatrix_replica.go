@@ -3,9 +3,14 @@
 
 package main
 
-import "cmatrix_replica/functions"
+import (
+	"cmatrix_replica/functions"
+	"fmt"
+)
+	
 
 func main() {
+	fmt.Print("\u001b[?25l")
 	ended := make(chan struct{})
 	functions.Terminal_clear()
 	for x := 1; x < 50; x++ {
@@ -14,5 +19,5 @@ func main() {
 	go functions.Q_catching(ended)
 	<-ended
 	functions.Terminal_clear()
-	functions.Move_cursor(0, 0)
+	fmt.Print("\u001b[0;0H")
 }
