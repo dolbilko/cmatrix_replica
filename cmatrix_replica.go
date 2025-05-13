@@ -26,7 +26,7 @@ func tail_remover(x, line_start, line_finish, speed int) {
 	for line := line_start; line < line_finish; line++ {
 		move_cursor(x, line)
 		fmt.Print(" ")
-		time.Sleep(time.Duration(50) * time.Millisecond)
+		time.Sleep(time.Duration(500) * time.Millisecond)
 	}
 }
 
@@ -38,7 +38,7 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 		default:
 			drop_length := rand.Intn(terminal_height/4)+3
 			tail := 0
-			speed := rand.Intn(100)+50
+			speed := rand.Intn(1000)+200
 			for line := 0; line < terminal_height; line++ {
 				move_cursor(x, line)
 				fmt.Printf("%c", random_char(symbols))
@@ -54,6 +54,7 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 				}
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
+			time.Sleep(time.Duration(rand.Intn(500)+10) * time.Millisecond)
 		}
 	}
 }
