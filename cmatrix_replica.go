@@ -22,7 +22,7 @@ func terminal_clear() {
 }
 
 
-func tail_remover(x, line_start, line_finish int) {
+func tail_remover(x, line_start, line_finish, speed int) {
 	for line := line_start; line < line_finish; line++ {
 		move_cursor(x, line)
 		fmt.Print(" ")
@@ -43,14 +43,14 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 				move_cursor(x, line)
 				fmt.Printf("%c", random_char(symbols))
 				tail = line-drop_length
-				if tail > -2 {
+				if tail > 0 {
 					go func(){
 						move_cursor(x, tail)
 						fmt.Print(" ")
 					}()
 				}
-				if terminal_height-line < 2 {
-					go tail_remover(x, terminal_height-drop_length, terminal_height)
+				if terminal_height-line < 1 {
+					go tail_remover(x, terminal_height-drop_length, terminal_height, speed)
 				}
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
