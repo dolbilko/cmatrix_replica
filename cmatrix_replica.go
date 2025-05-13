@@ -1,82 +1,18 @@
+// программа, реализующая эффект матрицы в терминале
+// необходима поддержка ANSI последовательностей
+
 package main
 
-import (
-	"fmt"
- 	"math/rand"
-	"time"
-	"github.com/eiannone/keyboard"
-)
-
-var symbols = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*")
-
-func random_char(symbols []rune) rune {
-	return symbols[rand.Intn(len(symbols))]
-}
-
-func move_cursor(x, line int) {
-	fmt.Printf("\u001b[%d;%dH", line, x)
-}
-
-func terminal_clear() {
-	fmt.Print("\u001b[2J")
-}
-
-
-func tail_remover(x, line_start, line_finish, speed int) {
-	for line := line_start; line < line_finish; line++ {
-		move_cursor(x, line)
-		fmt.Print(" ")
-		time.Sleep(time.Duration(speed) * time.Millisecond)
-	}
-}
-
-func drop_render(x, terminal_height int, ended <-chan struct{}){
-	for {
-		select {
-		case <-ended:
-			return
-		default:
-			drop_length := rand.Intn(terminal_height/4)+3
-			tail := 0
-			speed := rand.Intn(100)+50
-			for line := 0; line < terminal_height; line++ {
-				move_cursor(x, line)
-				fmt.Printf("%c", random_char(symbols))
-				tail = line-drop_length
-				if tail > 0 {
-					go func(){
-						move_cursor(x, tail)
-						fmt.Print(" ")
-					}()
-				}
-				if terminal_height-line < 2 {
-					go tail_remover(x, terminal_height-drop_length, terminal_height, speed)
-				}
-				time.Sleep(time.Duration(speed) * time.Millisecond)
-			}
-			time.Sleep(time.Duration(rand.Intn(50)+10) * time.Millisecond)
-		}
-	}
-}
-
+import "cmatrix_replica/functions"
 
 func main() {
 	ended := make(chan struct{})
-	go func() {
-		char, _, err := keyboard.GetSingleKey()
-		if err != nil {
-			panic(err)
-		}
-		if char == 'q' {
-			close(ended)
-		}
-	}()
-	terminal_clear()
+	functions.Terminal_clear()
 	for x := 1; x < 50; x++ {
-		go drop_render(x, 30, ended)
+		go functions.Drop_render(x, 30, ended)
 	}
-
+	go functions.Q_catching(ended)
 	<-ended
-	terminal_clear()
-	move_cursor(0, 0)
+	functions.Terminal_clear()
+	functions.Move_cursor(0, 0)
 }
