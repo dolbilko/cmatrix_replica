@@ -26,3 +26,5 @@ go.work.sum
 temp/
 drop.go
 new.go
+go.mod
+go.sum

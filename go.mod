@@ -1,4 +1,4 @@
-module pop
+module cmatrix_replica
 
 go 1.24.0
 

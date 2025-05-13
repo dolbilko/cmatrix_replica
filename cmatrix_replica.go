@@ -43,7 +43,7 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 				move_cursor(x, line)
 				fmt.Printf("%c", random_char(symbols))
 				tail = line-drop_length
-				if tail > 0 {
+				if tail > -1 {
 					move_cursor(x, tail)
 					fmt.Print(" ")
 				}
@@ -70,7 +70,7 @@ func main() {
 	}()
 	terminal_clear()
 	for x := 1; x < 50; x++ {
-		go drop_render(x, 40, ended)
+		go drop_render(x, 30, ended)
 	}
 
 	<-ended
