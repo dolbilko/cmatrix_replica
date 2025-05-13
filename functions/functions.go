@@ -4,7 +4,6 @@ import (
 	"fmt"
  	"math/rand"
 	"time"
-	// "sync"
 	"github.com/eiannone/keyboard"
 )
 
@@ -17,8 +16,8 @@ func Random_char(symbols []rune) rune {
 }
 
 
-func Move_cursor(x, line int) {
-	fmt.Printf("\u001b[%d;%dH", line, x)
+func Move_cursor(x, line_head int) {
+	fmt.Printf("\u001b[%d;%dH", line_head, x)
 }
 
 
@@ -52,18 +51,22 @@ func Drop_render(x, terminal_height int, ended <-chan struct{}){
 			drop_length := rand.Intn(terminal_height/4)+3
 			speed := rand.Intn(100)+50
 			tail_start := -drop_length
-			for line := 0; line < terminal_height; line++ {
-				Move_cursor(x, line)
+			for line_head := 0; line_head < terminal_height; line_head++ {
+				Move_cursor(x, line_head)
 				fmt.Printf("%c", Random_char(symbols))
-				if tail_start >= 0 && tail_start < terminal_height {
-					Move_cursor(x, tail_start)
+				for line1 := tail_start; line1 > 0; line1-- {
+					Move_cursor(x, line1)
+					fmt.Print(" ")
+				} 
+				for line2 := line_head+1; line2 < terminal_height; line2++ {
+					Move_cursor(x, line2)
 					fmt.Print(" ")
 				}
 				tail_start++
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
-			for line := terminal_height - drop_length; line != terminal_height; line++ {
-				Move_cursor(x, line)
+			for line_head := terminal_height - drop_length; line_head < terminal_height; line_head++ {
+				Move_cursor(x, line_head)
 				fmt.Print(" ")
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
