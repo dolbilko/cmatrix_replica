@@ -49,7 +49,7 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 						fmt.Print(" ")
 					}()
 				}
-				if terminal_height-line < 1 {
+				if terminal_height-line < 2 {
 					go tail_remover(x, terminal_height-drop_length, terminal_height, speed)
 				}
 				time.Sleep(time.Duration(speed) * time.Millisecond)
