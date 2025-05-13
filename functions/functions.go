@@ -70,6 +70,10 @@ func Drop_render(x, terminal_height int, ended <-chan struct{}){
 				fmt.Print(" ")
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
+			for line := 0; line > terminal_height; line++ {
+				Move_cursor(x, line)
+				fmt.Print(" ")
+			}
 			time.Sleep(time.Duration(rand.Intn(50)+10) * time.Millisecond)
 		}
 	}
