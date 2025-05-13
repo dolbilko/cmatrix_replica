@@ -13,8 +13,8 @@ func main() {
 	fmt.Print("\u001b[?25l")
 	ended := make(chan struct{})
 	functions.Terminal_clear()
-	for x := 1; x < 50; x+=2 {
-		go functions.Drop_render(x, 30, ended)
+	for x := 1; x < 101; x+=2 {
+		go functions.Drop_render(x, 80, ended)
 	}
 	go functions.Q_catching(ended)
 	<-ended

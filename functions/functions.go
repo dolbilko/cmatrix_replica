@@ -47,7 +47,7 @@ func Q_catching(channel chan struct{}) {
 
 
 func Drop_render(col, terminal_height int, ended <-chan struct{}){
-	time.Sleep(time.Duration(rand.Intn(1000) + 500) * time.Millisecond)
+	time.Sleep(time.Duration(rand.Intn(100) + 100) * time.Millisecond)
 	for {
 		select {
 		case <-ended:
