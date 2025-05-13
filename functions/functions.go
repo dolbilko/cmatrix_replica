@@ -17,7 +17,7 @@ func random_char() rune {
 
 
 func draw_char(col, line int, char rune) {
-	fmt.Printf("\u001b[%d;%dH%c", line, col, char)
+	fmt.Printf("\u001b[%d;%dH\u001b[2;32m%c", line, col, char)
 }
 
 
@@ -56,7 +56,9 @@ func Drop_render(col, terminal_height int, ended <-chan struct{}){
 			drop_length := rand.Intn(20)+5
 			speed := time.Duration(rand.Intn(50) + 25) * time.Millisecond
 			for line_head := 0; line_head < terminal_height + drop_length; line_head++ {
-				draw_char(col, line_head, random_char())
+				if line_head < terminal_height {
+					draw_char(col, line_head, random_char())
+				}
 				clear_char(col, line_head - drop_length)
 				time.Sleep(speed)
 			}
