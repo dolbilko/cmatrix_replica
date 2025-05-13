@@ -26,7 +26,7 @@ func tail_remover(x, line_start, line_finish, speed int) {
 	for line := line_start; line < line_finish; line++ {
 		move_cursor(x, line)
 		fmt.Print(" ")
-		time.Sleep(time.Duration(50) * time.Millisecond)
+		time.Sleep(time.Duration(speed) * time.Millisecond)
 	}
 }
 
@@ -54,6 +54,7 @@ func drop_render(x, terminal_height int, ended <-chan struct{}){
 				}
 				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
+			time.Sleep(time.Duration(rand.Intn(50)+10) * time.Millisecond)
 		}
 	}
 }
