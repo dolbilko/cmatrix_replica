@@ -55,7 +55,7 @@ func Drop_render(col, terminal_height int, ended <-chan struct{}){
 		default:
 			drop_length := rand.Intn(20)+5
 			speed := time.Duration(rand.Intn(100) + 50) * time.Millisecond
-			for line_head := -drop_length; line_head < terminal_height + drop_length; line_head++ {
+			for line_head := 0; line_head < terminal_height + drop_length; line_head++ {
 				if line_head - drop_length > 0 {
 					clear_char(col, line_head - drop_length)
 				}
