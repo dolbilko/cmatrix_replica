@@ -48,6 +48,7 @@ func Drop_render(x, terminal_height int, ended <-chan struct{}){
 		case <-ended:
 			return
 		default:
+			time.Sleep(time.Duration(rand.Intn(1000) + 50) * time.Millisecond)
 			drop_length := rand.Intn(terminal_height/4)+3
 			speed := rand.Intn(100)+50
 			tail_start := -drop_length
