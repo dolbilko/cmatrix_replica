@@ -4,6 +4,7 @@ import (
 	"fmt"
  	"math/rand"
 	"time"
+	"github.com/eiannone/keyboard"
 )
 
 var symbols = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*")
@@ -29,35 +30,50 @@ func tail_remover(x, line_start, line_finish int) {
 	}
 }
 
-func drop_render(x, terminal_height int){
+func drop_render(x, terminal_height int, ended <-chan struct{}){
 	for {
-		drop_length := rand.Intn(terminal_height/4)+3
-		tail := 0
-		speed := rand.Intn(100)+50
-		for line := 0; line < terminal_height; line++ {
-			move_cursor(x, line)
-			fmt.Printf("%c", random_char(symbols))
-			tail = line-drop_length
-			if tail > 0 {
-				move_cursor(x, tail)
-				fmt.Print(" ")
+		select {
+		case <-ended:
+			return
+		default:
+			drop_length := rand.Intn(terminal_height/4)+3
+			tail := 0
+			speed := rand.Intn(100)+50
+			for line := 0; line < terminal_height; line++ {
+				move_cursor(x, line)
+				fmt.Printf("%c", random_char(symbols))
+				tail = line-drop_length
+				if tail > 0 {
+					move_cursor(x, tail)
+					fmt.Print(" ")
+				}
+				if terminal_height-line < 2 {
+					go tail_remover(x, terminal_height-drop_length, terminal_height)
+				}
+				time.Sleep(time.Duration(speed) * time.Millisecond)
 			}
-			if terminal_height-line < 2 {
-				go tail_remover(x, terminal_height-drop_length, terminal_height)
-			}
-			time.Sleep(time.Duration(speed) * time.Millisecond)
 		}
-		// time.Sleep(time.Duration(rand.Intn(100) * time.Millisecond))
 	}
 }
 
 
 func main() {
+	ended := make(chan struct{})
+	go func() {
+		char, _, err := keyboard.GetSingleKey()
+		if err != nil {
+			panic(err)
+		}
+		if char == 'q' {
+			close(ended)
+		}
+	}()
 	terminal_clear()
 	for x := 1; x < 50; x++ {
-		go drop_render(x, 10)
+		go drop_render(x, 40, ended)
 	}
-	time.Sleep(time.Duration(5 * time.Second))
+
+	<-ended
 	terminal_clear()
 	move_cursor(0, 0)
 }
