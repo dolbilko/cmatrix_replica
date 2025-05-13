@@ -58,10 +58,8 @@ func Drop_render(x, terminal_height int, ended <-chan struct{}){
 				fmt.Printf("%c", Random_char(symbols))
 				tail = line-drop_length
 				if tail > 0 {
-					go func(){
-						Move_cursor(x, tail)
-						fmt.Print(" ")
-					}()
+					Move_cursor(x, tail)
+					fmt.Print(" ")
 				}
 				if terminal_height-line < 2 {
 					go Tail_remover(x, terminal_height-drop_length, terminal_height, speed)
