@@ -49,7 +49,7 @@ func Q_catching(channel chan struct{}) {
 			return
 		}
 		if char == 'q' {
-			close(channel)
+			defer close(channel)
 			return
 		}
 	}

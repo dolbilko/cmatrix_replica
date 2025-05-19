@@ -1,7 +1,7 @@
 # CMATRIX
 Реализация эффекта "матрицы" в терминале *Linux*
 
-# Запуск
+# Запуск (Первый)
 ```
 git clone https://github.com/dolbilko/cmatrix_replica.git
 ```
@@ -17,6 +17,12 @@ go get github.com/eiannone/keyboard
 ```
 go run cmatrix_replica
 ```
+# Запуск (Повторный)
+```
+// в директории проекта
+go run run cmatrix_replica
+```
+
 # Выход из программы
 Чтобы завершить выплонение напечатайте **q**
 
