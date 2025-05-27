@@ -20,7 +20,7 @@ go run cmatrix_replica
 # Запуск (Повторный)
 ```
 // в директории проекта
-go run run cmatrix_replica
+go run cmatrix_replica
 ```
 
 # Выход из программы
